@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans');
+
+$size-extra-small: 0.5rem;
+$size-small: 1rem;
+$size-medium: 1.5rem;
+$size-large: 2rem;
+$size-extra-large: 2.5rem;
+
+// color
+$color-havelock-blue  : #576be6;
+$color-oslo-gray      : #8d9297;
+$color-polar          : #eaf6fb;
+$color-perfume        : #c1b7f9;
+$color-transparent    : transparent;
+$color-valencia       : #D63031;
+$color-white          : #fff;
+$color-black          : #000;
+$color-text           : #383838;
+$color-royal-blue     : #5a68e8;
+$color-dark-blue      : #081dbb;
+$color-persian-pink   : #f06eaa;
+$color-red-ribbon     : #e80737;
+$color-caribbean-green: #08bba8;
+$color-medium-gray    : #949596;
+$color-chocolate      : #d2691e;
+$color-wheat          : #f5deb3;
+$color-silver         : #c0c0c0;
+$color-midnightblue   : #001b60;
+$color-darkturquoise  : #00c3e5;
+$color-lightgray      : #d0d0d0;
+$color-darkslategray  : #1b3d36;
+$color-gallery        : #eeeeee;
+$color-Tundora        : #444444;
+$color-swiss-coffee   : #DAD4D4;
+
+$color-black-20  : rgba(0, 0, 0,.2);
+$color-black-60  : rgba(0, 0, 0,.6);
+$color-perfume-60: rgba(193, 183, 249, .6);
+
+$color-bg-primary   : $color-polar;
+$color-error-primary: $color-valencia;
+$color-primary      : $color-havelock-blue;
+
+// icons
+$icon-fav       : '../../assets/images/favorite_icon.png';
+$icon-fav-active: '../../assets/images/favorite_active_icon.png';
+$icon-arrow-next: '../../assets/images/next.png';
+$icon-arrow-prev: '../../assets/images/prev.png';
+$icon-cart      : '../../assets/images/package_icon.png';
+$icon-facebook  : '../../assets/images/facebook-16.png';
+$icon-twitter   : '../../assets/images/twitter-16.png';
+$icon-instagram : '../../assets/images/instagram-16.png';
+$icon-google-plus : '../../assets/images/google-plus-16.png';
+$icon-next: '../../assets/images/next_small.png';
+$icon-prev: '../../assets/images/prev_small.png';
+$icon-check: '../../assets/images/check_icon.png';
+$icon-arrow-down: '../../assets/images/arrow_down.png';
+$icon-arrow-up: '../../assets/images/arrow_up.png';
+$icon-cart: '../../assets/images/icon_cart.png';
+$icon-delete: '../../assets/images/delete_icon.png';
+
+$font-merriweather-sans: 'Merriweather Sans', sans-serif;
+
+// z-index
+$z-index-loading: 10;
+$z-index-nav: 1000;
+
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-xs: 480px;

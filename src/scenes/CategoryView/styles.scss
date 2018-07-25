@@ -1,0 +1,145 @@
+@import '../../styles/_variables';
+
+.prodlist {
+	&__wrapper {
+		padding-top: 70px;
+		padding-bottom: 30px;
+
+		.loading-spinner {
+			margin: 15vw auto;
+		}
+	}
+
+	&__title {
+		display: flex;
+		padding: 10px 0 30px;
+		box-shadow: 0 2px 1px -2px $color-medium-gray;
+
+		.total-prod {
+			flex-basis: 25%;
+			margin: 0;
+			color: $color-midnightblue;
+			font-style: italic;
+			font-weight: 500;
+		}
+
+		.list-title {
+			flex-basis: 75%;
+			text-align: center;
+			margin: 0;
+			color: $color-midnightblue;
+			font-style: italic;
+		}
+
+		@media(max-width: $screen-md) {
+			flex-direction: column;
+			padding: 10px 0;
+
+			.total-prod {
+				text-align: center;
+				margin-bottom: 10px;
+			}
+		}
+	}
+
+	&__content {
+		.list-title {
+			margin: 20px 0;
+			text-transform: uppercase;
+			text-align: center;
+		}
+
+		.list-content {
+			.prod-item {
+				display: block;
+				color: $color-midnightblue;
+				margin-bottom: 10px;
+
+				&:hover {
+					text-decoration: none;
+
+					.prod-image {
+						border: 1px solid $color-oslo-gray;
+					}
+				}
+
+				p {
+					margin-bottom: 0;
+				}
+
+				.prod-image {
+					width: 100%;
+				}
+
+				.prod-name {
+					font-weight: 600;
+					font-size: 18px;
+					margin-top: 5px;
+				}
+
+				.prod-cate {
+					font-size: 14px;
+					font-style: italic;
+					line-height: 14px;
+					margin-bottom: 15px;
+				}
+
+				&-wrapper {
+					margin-bottom: 20px;
+				}
+			}
+
+			.prod-price {
+				color: $color-medium-gray;
+				margin: 5px 0 0;
+			}
+
+			.prod-thumbimg {
+				padding-bottom: 5px;
+				border-bottom: 1px solid $color-oslo-gray;
+
+				.thumb-item {
+					display: inline-block;
+					width: 100%;
+					border: 1px solid $color-swiss-coffee;
+
+					img {
+						width: 100%;
+					}
+
+					&:hover {
+						border: 1px solid $color-black;
+					}
+				}
+
+				.slick-slide {
+					text-align: center;
+					padding-right: 5px;
+				}
+
+				.slick-next {
+					top: 45%;
+					right: -15px;
+					background-image: url($icon-next);
+					background-repeat: no-repeat;
+					width: 12px;
+					height: 20px;
+
+					&:before {
+						display: none;
+					}
+				}
+
+				.slick-prev {
+					display: none!important;
+				}
+			}
+		}
+	}
+
+	@media (max-width: $screen-sm) {
+		&__filter {
+			padding-top: 0;
+		}
+	}
+}

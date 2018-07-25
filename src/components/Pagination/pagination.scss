@@ -1,0 +1,43 @@
+@import '../../styles/_variables';
+
+.pagy {
+    text-align: center;
+
+    &__item {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 1px solid $color-Tundora;
+        margin-right: 10px;
+        font-size: 12px;
+        line-height: 20px;
+        color: $color-midnightblue;
+
+        &:hover {
+            color: $color-white;
+            background: $color-midnightblue;
+            text-decoration: none;
+        }
+
+        &.active {
+            border: 0;
+
+            &:hover {
+                background: transparent;
+                color: $color-midnightblue;
+            }
+        }
+    }
+
+    &-Next,
+    &-Prev,
+    &-Last,
+    &-First {
+        border: 0;
+
+        &:hover {
+            background: transparent;
+            color: $color-Tundora;
+        }
+    }
+}
