@@ -4,11 +4,11 @@ import Storage from '../services/storage';
 
 const cartIdAdded = Storage('cart-id');
 
-export const addToCartSuccess = (response, shoeColorSizeId) => {
+export const addToCartSuccess = (cartItemAdded, shoeColorSizeId) => {
     return {
         type: ADD_TO_CART_SUCCESS,
         payload: {
-            response,
+            cartItemAdded,
             shoeColorSizeId
         }
     }
@@ -28,10 +28,13 @@ export const getCart = (cart) => {
     }
 }
 
-export const removeCartItemSuccess = (response) => {
+export const removeCartItemSuccess = (cartItemRemoved, shoeColorSizeIdRemoved) => {
     return {
         type: REMOVE_CART_SUCCESS,
-        payload: response
+        payload: {
+            cartItemRemoved,
+            shoeColorSizeIdRemoved
+        }
     }
 }
 
@@ -61,12 +64,12 @@ export const addToCart = (apiUrl, queries, shoeColorSizeId) => {
     }
 }
 
-export const removeCartItem = (apiUrl, params, queries) => {
+export const removeCartItem = (apiUrl, params, queries, shoeColorSizeId) => {
     return (dispatch) => {
         return Agent.Cart
             .remove(apiUrl, params, queries)
             .then(data => {
-                dispatch(removeCartItemSuccess(data))
+                dispatch(removeCartItemSuccess(data, shoeColorSizeId))
             })
     }
 }

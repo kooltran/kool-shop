@@ -13,7 +13,10 @@ import Storage from '../../services/storage';
 import { fetchProdDetail } from '../../actions/prodDetailAction';
 import { addToCart, updateQtySize } from '../../actions/cartAction';
 
-import {Shoe} from '../../Interfaces/shoe';
+import {Shoe} from '../../interfaces/shoe';
+import { ShoeColor } from '../../interfaces/shoe-color'
+import { Endpoints } from '../../interfaces/endpoints'
+import { Cart } from '../../interfaces/cart'
 
 import LoadingSpinner from '../../components/Loading';
 import ShoeSize from './shoesize';
@@ -28,7 +31,15 @@ interface DetailViewProps {
             name: string,
             color: string
         }
-    }
+    },
+    shoeColors: ShoeColor[],
+    endpoints: Endpoints,
+    cartAdded: Cart,
+    price: number,
+    remainedProd: number,
+    fetchProdDetail: Function,
+    addToCart: Function,
+    choosenSizeAdded: object
 }
 
 interface DetailViewState {
@@ -79,18 +90,25 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
 
     componentDidMount() {
 		const { name } = this.props.match.params;
-        this.props.fetchProdDetail(name);
+        this.props.fetchProdDetail(name)
+            .then(() => {
+                this.setState({
+                    mainNav: this.mainSlider,
+                    thumbNav: this.thumbSlider
+                })
+            })
  	}
 
-    componentDidUpdate(prevProps) {
-        if (this.props.match.params.color !== prevProps.match.params.color) {
-            this.setState({
-                selectedSize: null,
-                totalProd: null,
-                errorMessage: ''
-            })
+    componentWillReceiveProps(props) {
+        const { shoeColorSizeId, quantity } = this.state;
+        if (props.shoeColorSizeId ===  shoeColorSizeId) {
+            this.setState({ errorMessage: '' })
+        }
+        if (quantity >= props.remainedProd ) {
+            this.setState({ quantity: 1 })
         }
     }
+
 
     renderColorListImage(activeColor, className, imageSize) {
         const { shoeColors } = this.props;
@@ -152,7 +170,7 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
 
     onSubmitCart = (e) => {
         const { selectedSize, totalProd, shoeColorSizeId, quantity, remainedQty } = this.state;
-        const { cartAdded, endpoints, choosenSizeAdded } = this.props;
+        const { cartAdded, endpoints } = this.props;
         const cart = cartIdAdded.load();
         const { url, queries } = endpoints.carts.add;
         const cartInfo = {...queries, cart, shoeColorSizeId, quantity};
@@ -161,27 +179,9 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
                 errorMessage: 'Please select a size!'
             })
         } else {
-            // console.log(choosenSizeAdded, 'choosenSizeAdded')
-            // if (choosenSizeAdded) {
-            //     if (choosenSizeAdded.shoeColorSize.id === shoeColorSizeId) {
-            //         if (choosenSizeAdded.quantity < choosenSizeAdded.shoeColorSize.quantity) {
-            //             this.props.addToCart(url, cartInfo, shoeColorSizeId);
-            //         } else {
-            //             this.setState({ errorMessage: 'This product is out of stock' })
-            //         }
-            //     } else {
-            //         this.props.addToCart(url, cartInfo, shoeColorSizeId);
-            //     }
-            // } else {
-            //     this.props.addToCart(url, cartInfo, shoeColorSizeId);
-            // }
             if (cartAdded.items.length > 0) {
                 const choosenSize = cartAdded.items.find(item =>  item.shoeColorSize.id === shoeColorSizeId)
-                console.log(choosenSize)
                 if (choosenSize) {
-                    if(totalProd - (choosenSize.quantity + quantity) < quantity) {
-                        this.setState({ quantity: 1 })
-                    }
                     if (choosenSize.quantity < choosenSize.shoeColorSize.quantity) {
                         this.props.addToCart(url, cartInfo, shoeColorSizeId);
                     } else {
@@ -214,7 +214,7 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
 
     renderProductQty() {
         const { cartAdded } = this.props;
-        const { totalProd, shoeColorSizeId, remainedQty, choosenSize } = this.state;
+        const { totalProd, shoeColorSizeId, choosenSize } = this.state;
         let quantityArr = [], remainedProd;
         if (cartAdded) {
             cartAdded.items.map(item => {
@@ -371,8 +371,8 @@ const mapStateToProps = (state, ownProps) => {
         shoeColors: state.prodDetail.data.shoeColors,
         endpoints: state.initHome.data.endpoints,
         cartAdded: state.cart.data,
-        remainedProd: state.cart.remainedProd,
-        choosenSizeAdded: state.cart.choosenSizeAdded
+        shoeColorSizeId: state.cart.shoeColorSizeId,
+        remainedProd: state.cart.remainedProd
     }
 }
 

@@ -9,11 +9,7 @@ interface RequestParams {
 	body: any,
 	username: string,
 	email: string,
-	password: string,
-	passwordConfirm: string
 }
-
-const { fetch } = window;
 
 const request = {
 	get: (url: RequestParams) => {

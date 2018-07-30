@@ -82,13 +82,13 @@ class Nav extends React.Component<{}, {}> {
 		}
 	}
 
-	removeCartItem (cartItemId, cartId) {
+	removeCartItem (cartItemId, cartId, shoeColorSizeId) {
 		const {url, params, queries} = this.props.endpoints.carts.remove;
 		const paramsObj = {}
 		const queriesObj = {}
 		paramsObj[params.cart] = cartId;
 		queriesObj[queries.cartItems] = cartItemId;
-		this.props.removeCartItem(url, paramsObj, queriesObj);
+		this.props.removeCartItem(url, paramsObj, queriesObj, shoeColorSizeId);
 	}
 
 	renderMiniCartContent(cartInfo) {
@@ -120,7 +120,7 @@ class Nav extends React.Component<{}, {}> {
 												</li>
 											</ul>
 										</div>
-										<span className="remove-cartitem" onClick={() => this.removeCartItem(item.id, cartInfo.id)}></span>
+										<span className="remove-cartitem" onClick={() => this.removeCartItem(item.id, cartInfo.id, item.shoeColorSize.id)}></span>
 									</li>
 								)
 							})
@@ -184,7 +184,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchInitData: () => dispatch(fetchInitData()),
-		removeCartItem: (apiUrl, params, queries) => dispatch(removeCartItem(apiUrl, params, queries))
+		removeCartItem: (apiUrl, params, queries, shoeColorSizeId) => dispatch(removeCartItem(apiUrl, params, queries, shoeColorSizeId))
 	}
 }
 
