@@ -6,7 +6,7 @@ import {ShoeColor} from '../../interfaces/shoe-color';
 interface ColorSizesProps {
     shoeColors:  ShoeColor[],
     onChangeShoeSizes: Function,
-    activeColorName: string
+    activeColorName: string,
 }
 
 export default class ShoeSize extends React.Component<ColorSizesProps, {}> {
@@ -14,8 +14,8 @@ export default class ShoeSize extends React.Component<ColorSizesProps, {}> {
         super(props)
     }
 
-    handleChangeShoeSizes(shoeColorSizeId, e) {
-        this.props.onChangeShoeSizes(shoeColorSizeId, e)
+    handleChangeShoeSizes = (e: any) => {
+        this.props.onChangeShoeSizes(e)
     }
 
     render() {
@@ -26,7 +26,7 @@ export default class ShoeSize extends React.Component<ColorSizesProps, {}> {
                     return color.sizes.map((size, index) => {
                         return (
                             <div key={index} className={`size-item-wrapper ${(size.quantity === 0) ? 'disabled-size' : ''}`}>
-                                <input type="text" className={`size-item`} value={size.size} onClick={(e) => this.handleChangeShoeSizes(size.id, e)} readOnly/>
+                                <input type="text" className={`size-item`} value={size.size} onClick={this.handleChangeShoeSizes} readOnly/>
                             </div>
                         )
                     })

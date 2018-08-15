@@ -44,10 +44,9 @@ const Detail = {
 const Cart = {
 	add: (apiUrl, queries: object) => request.get(getUrl(apiUrl, {}, queries)),
 	detail: (apiUrl: string, params: object) => request.get(getUrl(apiUrl, params)),
-	remove: (apiUrl: string, params: object, queries: object) => request.get(getUrl(apiUrl, params, queries))
+	remove: (apiUrl: string, params: object, queries: object) => request.get(getUrl(apiUrl, params, queries)),
+	update: (apiUrl: string, params: object, queries: object) => request.get(getUrl(apiUrl, params, queries))
 }
-
-
 
 const getUrl = (inputUrl :string, params :{[key: string]: string} = {}, queries :{[key: string] :string} = {}) => {
     let url = inputUrl;

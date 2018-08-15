@@ -1,27 +1,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Text from '../../components/Text';
-import Agent from '../../services/agent';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
-import * as get from 'lodash.get';
 import Select from 'react-select';
 import './styles.scss';
 
-import cateService from '../../services/cateService';
 import Storage from '../../services/storage';
 import { fetchProdDetail } from '../../actions/prodDetailAction';
-import { addToCart, updateQtySize } from '../../actions/cartAction';
+import { addToCart } from '../../actions/cartAction';
 
 import {Shoe} from '../../interfaces/shoe';
 import { ShoeColor } from '../../interfaces/shoe-color'
 import { Endpoints } from '../../interfaces/endpoints'
 import { Cart } from '../../interfaces/cart'
 
-import LoadingSpinner from '../../components/Loading';
 import ShoeSize from './shoesize';
-import { makeGetCartState } from '../../selector/cartSelector';
-import * as _ from 'lodash';
 
 interface DetailViewProps {
     name: string,
@@ -59,12 +52,6 @@ interface DetailViewState {
     choosenSize: Object
 }
 
-const sliderSettings = {
-	slidesToShow: 1,
-	slidesToScroll: 1,
-	dots: false
-}
-
 const cartIdAdded = Storage('cart-id');
 
 class DetailView extends React.Component<DetailViewProps, DetailViewState> {
@@ -85,11 +72,11 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
             cartId: null,
             remainedQty: null,
         }
-        this.prodName = this.props.match.params.name;
+        this.prodName = this.props.match!.params.name;
     }
 
     componentDidMount() {
-		const { name } = this.props.match.params;
+		const { name } = this.props.match!.params;
         this.props.fetchProdDetail(name)
             .then(() => {
                 this.setState({
@@ -137,10 +124,10 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
         });
     }
 
-    onChangeShoeSizes = (shoeColorSizeId, e) => {
+    onChangeShoeSizes = (e: any) => {
         const { shoeColors, cartAdded } = this.props;
         const { totalProd } = this.state;
-        const activeColorName = this.props.match.params.color;
+        const activeColorName = this.props.match!.params.color;
         const { value, label } = e.target;
         const parentNode = e.target.parentNode;
         const childNodes = parentNode.parentNode.childNodes;
@@ -168,7 +155,7 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
         })
     }
 
-    onSubmitCart = (e) => {
+    onSubmitCart = () => {
         const { selectedSize, totalProd, shoeColorSizeId, quantity, remainedQty } = this.state;
         const { cartAdded, endpoints } = this.props;
         const cart = cartIdAdded.load();
@@ -215,7 +202,8 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
     renderProductQty() {
         const { cartAdded } = this.props;
         const { totalProd, shoeColorSizeId, choosenSize } = this.state;
-        let quantityArr = [], remainedProd;
+        let quantityArr = [];
+        let remainedProd;
         if (cartAdded) {
             cartAdded.items.map(item => {
                 if (item.shoeColorSize.id === shoeColorSizeId) {
@@ -271,7 +259,7 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
     }
 
     renderDetailView() {
-        const activeColorName = this.props.match.params.color;
+        const activeColorName = this.props.match!.params.color;
         const { name, price, shoeColors, cartAdded } = this.props;
         const { quantity, totalProd, selectedSize, errorMessage, shoeColorSizeId } = this.state;
         let colorName;
@@ -363,7 +351,7 @@ class DetailView extends React.Component<DetailViewProps, DetailViewState> {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         name: state.prodDetail.data.name,
         price: state.prodDetail.data.price,
@@ -378,8 +366,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchProdDetail: (name) => dispatch(fetchProdDetail(name)),
-        addToCart: (apiUrl, queries, shoeColorSizeId) => dispatch(addToCart(apiUrl, queries, shoeColorSizeId)),
+        fetchProdDetail: (name: string) => dispatch(fetchProdDetail(name)),
+        addToCart: (apiUrl: string, queries: object, shoeColorSizeId: number) => dispatch(addToCart(apiUrl, queries, shoeColorSizeId)),
     }
 }
 

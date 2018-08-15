@@ -7,6 +7,24 @@ export interface Endpoints {
                 shoeColorSizeId: number,
                 quantity: number
             }
+        },
+        remove: {
+            url: string,
+            params: {
+                cart: string
+            },
+            queries: {
+                cartItems: string
+            }
+        },
+        update: {
+            url: string,
+            params: {
+                cart: string
+            },
+            queries: {
+                cartItems: string
+            }
         }
     }
 }

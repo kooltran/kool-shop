@@ -1,9 +1,10 @@
-import { ADD_TO_CART_SUCCESS, REMOVE_CART_SUCCESS, UPDATE_QUANTITY_SIZE, GET_CART } from '../constants/action-types';
+import { ADD_TO_CART_SUCCESS, REMOVE_CART_SUCCESS, UPDATE_CART_QUANTITY_SUCCESS, GET_CART } from '../constants/action-types';
 
 const INITIALSTATE = {
     data: null,
     remainedProd: null,
-    shoeColorSizeId: null
+    shoeColorSizeId: null,
+    isCartAdded: false
 }
 
 export default function cart(state = INITIALSTATE, action) {
@@ -21,14 +22,22 @@ export default function cart(state = INITIALSTATE, action) {
                 ...state,
                 data: cartItemAdded,
                 remainedProd,
-                shoeColorSizeId
+                shoeColorSizeId,
+                isCartAdded: true
             }
         case REMOVE_CART_SUCCESS:
             const { cartItemRemoved, shoeColorSizeIdRemoved } = action.payload;
             return {
                 ...state,
                 data: cartItemRemoved,
-                shoeColorSizeId: shoeColorSizeIdRemoved
+                shoeColorSizeId: shoeColorSizeIdRemoved,
+                isCartAdded: false
+            }
+        case UPDATE_CART_QUANTITY_SUCCESS:
+            return {
+                ...state,
+                data: action.payload,
+                isCartAdded: false
             }
         default:
             return state;

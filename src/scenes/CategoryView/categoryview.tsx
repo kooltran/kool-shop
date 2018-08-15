@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Text from '../../components/Text';
-import Agent from '../../services/agent';
-import * as queryString    from "query-string";
-import Slider from 'react-slick';
-import { Link } from 'react-router-dom';
-import * as get from 'lodash.get';
+import * as queryString from "query-string";
 import './styles.scss';
 
 
@@ -15,7 +10,6 @@ import FilterBrands from '../../components/Filter/filter-brands';
 import FilterItemPerPage from '../../components/Filter/fitler-item-page';
 import FilterOptions from '../../components/Filter/filter-options-list';
 import Pagination from '../../components/Pagination/pagination';
-import cateService from '../../services/cateService';
 import { fetchProdList } from '../../actions/prodListAction'
 
 import {ShoeCollection} from '../../Interfaces/shoe-collection';

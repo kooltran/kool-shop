@@ -1,30 +1,54 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Agent from '../../services/agent'
-import cateService from '../../services/cateService';
 import { Category } from '../../interfaces/category';
 import { fetchInitData } from '../../actions/homeAction';
-import { removeCartItem } from '../../actions/cartAction';
-import * as _ from 'lodash';
+import RemoveCartItem from '../../components/Cart/remove-cartItem';
+import { Cart } from '../../Interfaces/cart';
+import { Endpoints } from '../../Interfaces/endpoints';
 import './Nav.scss';
 
 import * as Logo from '../../assets/images/logo.png'
+import { setTimeout } from 'timers';
+import {Modal} from 'react-bootstrap';
 
 interface NavProps {
 	categories: Category,
 	removeCartItem: Function,
-	fetchInitData: Function
+	fetchInitData: Function,
+	cart: Cart,
+	endpoints: Endpoints,
+	isCartAdded: boolean,
+}
+
+interface NavStates {
+	showMiniCart: boolean,
+	isShowMiniCart: boolean
 }
 
 
-class Nav extends React.Component<{}, {}> {
+class Nav extends React.Component<NavProps, NavStates> {
 	constructor(props: object) {
 		super(props);
+
+		this.state = {
+			isShowMiniCart: false,
+		}
 	}
 
 	componentDidMount() {
 		this.props.fetchInitData();
+	}
+
+	componentWillReceiveProps(props) {
+		if (props.isCartAdded) {
+			this.setState({ isShowMiniCart: true })
+			setTimeout(() => {
+				this.setState({ isShowMiniCart: false })
+			}, 1000)
+		} else {
+			this.setState({ isShowMiniCart: false })
+		}
 	}
 
 	renderSubMenuItem(cate) {
@@ -42,12 +66,12 @@ class Nav extends React.Component<{}, {}> {
 		parentBody[0].classList.remove('slide-menu-mb');
 	}
 
-	openSubMobileMenu  = (e) => {
+	openSubMobileMenu  = (e: any) => {
 		const parent = e.target.parentNode;
 		parent.classList.add('slide-submenu-mb')
 	}
 
-	backSubmenuMobile = (e) => {
+	backSubmenuMobile = (e: any) => {
 		const parentLI  = e.target.closest('li');
 		parentLI.classList.remove('slide-submenu-mb');
 	}
@@ -82,20 +106,12 @@ class Nav extends React.Component<{}, {}> {
 		}
 	}
 
-	removeCartItem (cartItemId, cartId, shoeColorSizeId) {
-		const {url, params, queries} = this.props.endpoints.carts.remove;
-		const paramsObj = {}
-		const queriesObj = {}
-		paramsObj[params.cart] = cartId;
-		queriesObj[queries.cartItems] = cartItemId;
-		this.props.removeCartItem(url, paramsObj, queriesObj, shoeColorSizeId);
-	}
-
-	renderMiniCartContent(cartInfo) {
+	renderMiniCartContent(cartInfo: Cart) {
+		const { isShowMiniCart } = this.state;
 		if (cartInfo.totalQuantity !== 0) {
 			return (
-				<div className="mini__cart">
-					<ul className="cart-wrapper">
+				<div className={`mini__cart ${isShowMiniCart ? 'show-mini-cart' : ''}`}>
+					<ul className="mini__cart--wrapper">
 						{
 							cartInfo &&  cartInfo.items.map((item, index) => {
 								return (
@@ -120,15 +136,24 @@ class Nav extends React.Component<{}, {}> {
 												</li>
 											</ul>
 										</div>
-										<span className="remove-cartitem" onClick={() => this.removeCartItem(item.id, cartInfo.id, item.shoeColorSize.id)}></span>
+										<RemoveCartItem
+											removeEnpoints={this.props.endpoints.carts.remove}
+											cartItemId={item.id}
+											cartId={cartInfo.id}
+											shoeColorSizeId={item.shoeColorSize.id}
+										/>
 									</li>
 								)
 							})
 						}
 					</ul>
-					<div className="cart-totalprice">
+					<div className="mini__cart--totalprice">
 						<span className="prod-label">TOTAL PRICE: </span>
 						<span className="prod-totalprice">{cartInfo.price}$</span>
+					</div>
+					<div className="mini__cart--button">
+						<Link to="/cart" className="btn-cart-view">VIEW CART</Link>
+						<Link to="/" className="btn-cart-checkout">GO TO CHECKOUT</Link>
 					</div>
 				</div>
 			)
@@ -173,18 +198,18 @@ class Nav extends React.Component<{}, {}> {
 
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 	return {
 		categories: state.initHome.data.categories,
 		endpoints: state.initHome.data.endpoints,
-		cart: state.cart.data
+		cart: state.cart.data,
+		isCartAdded: state.cart.isCartAdded
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchInitData: () => dispatch(fetchInitData()),
-		removeCartItem: (apiUrl, params, queries, shoeColorSizeId) => dispatch(removeCartItem(apiUrl, params, queries, shoeColorSizeId))
 	}
 }
 

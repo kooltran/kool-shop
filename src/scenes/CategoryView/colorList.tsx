@@ -1,7 +1,4 @@
 import * as React from 'react';
-import Text from '../../components/Text';
-import Agent from '../../services/agent';
-import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import {ShoeColor} from '../../interfaces/shoe-color';
 

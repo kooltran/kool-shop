@@ -171,13 +171,16 @@
 
 		&:hover {
 			.mini__cart {
-				display: block;
+				opacity: 1;
+				visibility: visible;
 			}
 		}
 
 		.mini__cart {
-			display: none;
+			display: block;
 			position: absolute;
+			opacity: 0;
+			visibility: hidden;
 			top: 66px;
 			right: 0;
 			background: $color-white;
@@ -186,59 +189,49 @@
 			box-shadow: 0 3px 4px 0 $color-medium-gray;
 			color: $color-midnightblue;
 
-			.cart-item {
-				display: flex;
-				position: relative;
-				padding: 15px 0;
-				border-bottom: 1px solid $color-swiss-coffee;
-
-				.prod-image {
-					margin-right: 15px;
-					flex-basis: 80px;
-
-					img {
-						width: 100%;
+			&--wrapper {
+				.cart-item {
+					display: flex;
+					position: relative;
+					padding: 15px 0;
+					border-bottom: 1px solid $color-swiss-coffee;
+	
+					.prod-image {
+						margin-right: 15px;
+						flex-basis: 80px;
+	
+						img {
+							width: 100%;
+						}
+					}
+	
+					.prod-name {
+						color: $color-midnightblue;
+						font-weight: 600;
+					}
+	
+					.prod-label {
+						font-weight: 600;
+						color: $color-midnightblue;
+						margin-right: 5px;
+						font-size: 14px;
+					}
+	
+					.prod-info {
+						font-size: 14px;
+						color: $color-midnightblue;
 					}
 				}
-
-				.prod-name {
-					color: $color-midnightblue;
-					font-weight: 600;
-				}
-
-				.prod-label {
-					font-weight: 600;
-					color: $color-midnightblue;
-					margin-right: 5px;
-					font-size: 14px;
-				}
-
-				.prod-info {
-					font-size: 14px;
-					color: $color-midnightblue;
-				}
-
-				.remove-cartitem {
-					display: inline-block;
-					position: absolute;
-					top: 20px;
-					right: 0;
-					width: 15px;
-					height: 15px;
-					background-image: url($icon-delete);
-					background-size: cover;
-					cursor: pointer;
-				}
-			}
-
-			.cart-totalprice {
-				text-align: right;
-
-				.prod-label,
-				.prod-totalprice {
-					font-weight: 600;
-					color: $color-midnightblue;
-					font-size: 18px;
+	
+				.cart-totalprice {
+					text-align: right;
+	
+					.prod-label,
+					.prod-totalprice {
+						font-weight: 600;
+						color: $color-midnightblue;
+						font-size: 18px;
+					}
 				}
 			}
 
@@ -246,10 +239,53 @@
 				margin: 0;
 				text-align: center;
 			}
+
+			&--button {
+				margin-top: 30px;
+
+				a {
+					display: inline-block;
+					height: 45px;
+					line-height: 45px;
+					width: 49%;
+					text-align: center;
+					color: $color-midnightblue;
+					font-weight: 600;
+					font-size: 14px;
+				}
+
+				.btn-cart-view {
+					border: 2px solid $color-darkturquoise;
+
+					&:hover {
+						border-color: $pacific-blue;
+					}
+				}
+
+				.btn-cart-checkout {
+					background-color: $color-darkturquoise;
+					float: right;
+
+					&:hover {
+						opacity: .8;
+					}
+				}
+			}
+
+			&.show-mini-cart {
+				opacity: 1;
+				visibility: visible;
+				transition: opacity .5s linear;
+			}
 		}
 
 		@media (max-width: $screen-xs) {
 			padding: 20px 10px 0 0;
+			
+			.mini__cart {
+				width: 100vw;
+				right: -15px;
+			}
 		}
 	}
 }
@@ -352,4 +388,24 @@
 			}
 		}
 	}
+}
+
+
+.remove-cartitem {
+	display: inline-block;
+	position: absolute;
+	top: 20px;
+	right: 0;
+	width: 15px;
+	height: 15px;
+	background-image: url($icon-delete);
+	background-size: cover;
+	cursor: pointer;
+}
+
+.modal-container {
+	position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+	position: absolute;
 }

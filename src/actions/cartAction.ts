@@ -1,4 +1,4 @@
-import { ADD_TO_CART_FAIL, ADD_TO_CART_SUCCESS, REMOVE_CART_SUCCESS, UPDATE_QUANTITY_SIZE, GET_CART } from '../constants/action-types';
+import { ADD_TO_CART_FAIL, ADD_TO_CART_SUCCESS, REMOVE_CART_SUCCESS, GET_CART, UPDATE_CART_QUANTITY_SUCCESS, UPDATE_CART_QUANTITY } from '../constants/action-types';
 import Agent from '../services/agent';
 import Storage from '../services/storage';
 
@@ -38,17 +38,6 @@ export const removeCartItemSuccess = (cartItemRemoved, shoeColorSizeIdRemoved) =
     }
 }
 
-export const updateQtySize = (cartId, shoeColorSizeId, remainedQty) => {
-    return {
-        type: UPDATE_QUANTITY_SIZE,
-        payload: {
-            cartId,
-            shoeColorSizeId,
-            remainedQty
-        }
-    }
-}
-
 
 export const addToCart = (apiUrl, queries, shoeColorSizeId) => {
     return (dispatch) => {
@@ -70,6 +59,23 @@ export const removeCartItem = (apiUrl, params, queries, shoeColorSizeId) => {
             .remove(apiUrl, params, queries)
             .then(data => {
                 dispatch(removeCartItemSuccess(data, shoeColorSizeId))
+            })
+    }
+}
+
+export const updateCartQtySuccess = (cartUpdated) => {
+    return {
+        type: UPDATE_CART_QUANTITY_SUCCESS,
+        payload: cartUpdated
+    }
+}
+
+export const updateCartQty = (apiUrl, params, queries) => {
+    return (dispatch) => {
+        return Agent.Cart
+            .update(apiUrl, params, queries)
+            .then(data => {
+                dispatch(updateCartQtySuccess(data))
             })
     }
 }
