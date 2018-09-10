@@ -3,7 +3,8 @@ import './Modal.scss'
 
 
 interface ModalProps {
-    removeCartItem: Function
+    removeCartItem: Function,
+    onDeleteCartItem: Function
 }
 
 interface ModalState {
@@ -24,29 +25,33 @@ export default class Modal extends React.Component<ModalProps, ModalState> {
         const { show } = props;
         if (show) {
             this.setState({ isShowModal: true })
+            document.getElementsByTagName('body')[0].classList.add('fix-scroll')
+        } else {
+            this.setState({ isShowModal: false })
+            document.getElementsByTagName('body')[0].classList.remove('fix-scroll')
         }
     }
 
     handleHide = () => {
         this.setState({ isShowModal: false })
+        document.getElementsByTagName('body')[0].classList.remove('fix-scroll')
     }
 
     handleClickOutSide = (e: any) => {
         for (let item of e.target.classList) {
             if (item === 'confirm-modal') {
                 this.setState({ isShowModal: false })
+                document.getElementsByTagName('body')[0].classList.remove('fix-scroll')
             }
         }
     }
 
     handleRemoveCartItem = () => {
-        this.props.removeCartItem();
-        this.setState({ isShowModal: false })
+        this.props.onDeleteCartItem();
     }
 
     render() {
         const { isShowModal } = this.state;
-        console.log(isShowModal)
         return (
             <div className={`confirm-modal ${isShowModal ? 'in' : ''}`} onClick={this.handleClickOutSide}>
                 <div className="confirm-modal__content">

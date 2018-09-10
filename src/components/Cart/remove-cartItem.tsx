@@ -1,8 +1,4 @@
 import * as React from 'react';
-import { removeCartItem } from '../../actions/cartAction';
-import { connect } from 'react-redux';
-import Modal from '../../components/Modal/modal';
-
 
 interface RemoveCartItemProps {
     cartId: number,
@@ -17,48 +13,34 @@ interface RemoveCartItemProps {
     },
     cartItemId: number,
     shoeColorSizeId: number,
-    removeCartItem: Function
+    onRemoveCartItem: Function,
+    onClickShowModal: Function
 }
 
 
 interface RemoveCartItemState {
-    show: boolean
+    cartId: number,
+    cartItemId: number
 }
 
-class RemoveCartItem extends React.Component<RemoveCartItemProps, RemoveCartItemState> {
+export default class RemoveCartItem extends React.Component<RemoveCartItemProps, RemoveCartItemState> {
     constructor(props) {
         super(props);
-        this.state = {
-            show: false
-        };
     }
-
-    removeCartItem = () => {
-        const { cartId, removeEnpoints, cartItemId, shoeColorSizeId, removeCartItem } = this.props;
-        const {url, params, queries} = removeEnpoints;
-		const paramsObj = {}
-		const queriesObj = {}
-		paramsObj[params.cart] = cartId;
-        queriesObj[queries.cartItems] = cartItemId;
-        removeCartItem(url, paramsObj, queriesObj, shoeColorSizeId);
-	}
+    
+    handleShowConfirmModal = () => {
+        const { shoeColorSizeId, cartItemId, onRemoveCartItem, onClickShowModal } = this.props;
+        onRemoveCartItem(shoeColorSizeId, cartItemId);
+        onClickShowModal(true);
+        // console.log(document.getElementsByTagName('body'))
+        // document.getElementsByTagName('body')[0].classList.add('fix-scroll')
+    }
 
     render() {
         return (
             <div>
-                <span className="remove-cartitem" onClick={() => this.setState({ show: true })}></span>
-                <Modal 
-                    show={this.state.show}
-                    removeCartItem={this.removeCartItem}
-                />
+                <span className="remove-cartitem" onClick={this.handleShowConfirmModal}></span>
             </div>
         )
     }
 }
-const mapDispatchToProps = (dispatch) => {
-	return {
-		removeCartItem: (apiUrl, params, queries, shoeColorSizeId) => dispatch(removeCartItem(apiUrl, params, queries, shoeColorSizeId))
-	}
-}
-
-export default connect(null, mapDispatchToProps)(RemoveCartItem);

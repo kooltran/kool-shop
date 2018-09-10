@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {ShoeColor} from '../../interfaces/shoe-color';
 
-
 interface ColorSizesProps {
     shoeColors:  ShoeColor[],
     onChangeShoeSizes: Function,

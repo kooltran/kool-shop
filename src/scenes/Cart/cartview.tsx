@@ -3,23 +3,28 @@ import { connect } from 'react-redux';
 import './cart.scss';
 import { Link } from 'react-router-dom';
 import QuantityInput from './quantityInput';
-import { updateCartQty } from '../../actions/cartAction';
+import { updateCartQty, removeCartItem } from '../../actions/cartAction';
 import LoadingSpinner from '../../components/Loading';
 import RemoveCartItem from '../../components/Cart/remove-cartItem';
 import { Endpoints } from '../../Interfaces/endpoints';
+import Modal from '../../components/Modal/modal';
 
 import { Cart } from '../../interfaces/cart';
 
 interface CartViewProps {
     cart: Cart,
     updateCartQty: Function,
-    endpoints: Endpoints
+    endpoints: Endpoints,
+    isShowConfirmModal: boolean,
+    removeCartItem: Function
 }
 
 interface CartViewState {
     quantity: object,
     cartItemId: number,
-    errorMessage: object
+    shoeColorSizeId: number,
+    errorMessage: object,
+    show: boolean
 }
 
 class CartView extends React.Component<CartViewProps, CartViewState> {
@@ -28,7 +33,9 @@ class CartView extends React.Component<CartViewProps, CartViewState> {
         this.state = {
             quantity: {},
             cartItemId: null,
-            errorMessage: {}
+            shoeColorSizeId: null,
+            errorMessage: {},
+            show: false
         }
     }
 
@@ -76,8 +83,34 @@ class CartView extends React.Component<CartViewProps, CartViewState> {
         }
     }
 
+    onClickShowModal = (isShowConfirmModal: boolean) => {
+        if (isShowConfirmModal) {
+            this.setState({ show: true })
+        }
+    }
+
+    onRemoveCartItem = (shoeColorSizeId: number, cartItemId: number) => {
+        this.setState({
+            cartItemId: cartItemId,
+            shoeColorSizeId: shoeColorSizeId
+        })
+    }
+
+    onDeleteCartItem = () => {
+        const { endpoints, cart, removeCartItem } = this.props;
+        const removeEnpoints = endpoints.carts.remove;
+        const { cartItemId, shoeColorSizeId } = this.state;
+        const {url, params, queries} = removeEnpoints;
+		const paramsObj = {}
+		const queriesObj = {}
+		paramsObj[params.cart] = cart.id;
+        queriesObj[queries.cartItems] = cartItemId;
+        removeCartItem(url, paramsObj, queriesObj, shoeColorSizeId);
+        this.setState({ show: false })
+    }
+
     renderCartItemList() {
-        const { cart endpoints } = this.props;
+        const { cart } = this.props;
         const { quantity, errorMessage } = this.state;
         if (cart) {
             return cart.items.map((item, index) => {
@@ -105,10 +138,10 @@ class CartView extends React.Component<CartViewProps, CartViewState> {
                         <td className="prod-totalprice">{item.totalPrice}</td>
                         <td className="prod-remove">
                             <RemoveCartItem
-                                removeEnpoints={endpoints.carts.remove}
                                 cartItemId={item.id}
-                                cartId={cart.id}
                                 shoeColorSizeId={item.shoeColorSize.id}
+                                onRemoveCartItem={this.onRemoveCartItem}
+                                onClickShowModal={this.onClickShowModal}
                             />
                         </td>
                     </tr>
@@ -119,6 +152,7 @@ class CartView extends React.Component<CartViewProps, CartViewState> {
 
     render() {
         const { cart } = this.props;
+        const { show } = this.state;
         if (cart) {
             if (cart.items.length > 0) {
                 return (
@@ -136,8 +170,14 @@ class CartView extends React.Component<CartViewProps, CartViewState> {
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>{this.renderCartItemList()}</tbody>
+                                    <tbody>
+                                        {this.renderCartItemList()}
+                                    </tbody>
                                 </table>
+                                <Modal
+                                    show={show}
+                                    onDeleteCartItem={this.onDeleteCartItem}
+                                />
                             </div>
                         </div>
                     </div>
@@ -168,9 +208,10 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Function) => {
     return {
-        updateCartQty: (apiUrl, params, queries) => dispatch(updateCartQty(apiUrl, params, queries))
+        updateCartQty: (apiUrl: string, params: object, queries: object) => dispatch(updateCartQty(apiUrl, params, queries)),
+        removeCartItem: (apiUrl: string, params: object, queries: object, shoeColorSizeId: number) => dispatch(removeCartItem(apiUrl, params, queries, shoeColorSizeId))
     }
 }
 

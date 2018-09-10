@@ -4,7 +4,7 @@
     display: none;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 25vh;
     left: 0;
     top: 0;
     width: 100%;
@@ -24,6 +24,7 @@
         padding: 0;
         border: 1px solid #888;
         width: 400px;
+        text-align: center;
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
         animation: animatetop .4s;
     } 
@@ -49,7 +50,9 @@
         }
     }
     
-    &__body {padding-bottom:  20px;}
+    &__body {
+        padding-bottom:  20px;
+    }
     
     &__footer {
         padding: 2px 16px;
